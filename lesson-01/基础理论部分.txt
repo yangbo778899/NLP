@@ -1,0 +1,54 @@
+一、理论基础部分
+0. Can you come up out 3 sceneraies which use AI methods?
+Ans: {'医学检查的辅助解读' , '法律咨询解答' , '学生学习能力的评价'}
+
+1. How do we use Github; Why do we use Jupyter and Pycharm;
+Ans: - 利用Pycharm中内置集成的 github plugin。
+     - Jupyter方便试手小的代码片段，对于新手来讲，Jupyter更加轻量级；
+     - Pycharm更适合工程项目的开发。
+
+2. What's the Probability Model?
+Ans: 基于频率统计的方式，来预测一个事件出现的机会。
+
+3. Can you came up with some sceneraies at which we could use Probability Model?
+Ans: - 拼写纠错
+     - 分类问题最后似乎都能转化为概率问题
+
+4. Why do we use probability and what's the difficult points for programming based on parsing and pattern match?
+Ans: - 将语法树转化成规则字典的过程中，对能够循环引用的规则处理，需要留意。
+     - 进行词频统计时，需要将无意义的符号、词语进行预处理，对结果的提升有较大帮助。
+
+5. What's the Language Model;
+Ans: - 基于分词的词频统计，输出需要预测的语句，分词后在语言模型上出现的联合概率，通过比较概率的大小，来判断被预测的语句是否合理。
+
+6. Can you came up with some sceneraies at which we could use Language Model?
+Ans: - 问答机器人
+     - 拼写纠错
+
+7. What's the 1-gram language model;
+Ans: P(w1,w2,⋯,wm)=P(w1)p(w2)....p(wm)
+
+8. What's the disadvantages and advantages of 1-gram language model;
+Ans: - 1-gram较为简单，运算量相对小点。
+     - 1-gram进行词频统计时，如果对于高频辅助词没有进行合适的处理，输出结果会影响。
+
+9. What't the 2-gram models;
+Ans: P(w1,w2,⋯,wm)=P(w1)p(w2|w1)p(w3|w2)....p(wm|wm-1)
+
+
+二、Lesson-01 Assignment 问答
+Q: 这个模型有什么问题？ 你准备如何提升？
+Ans: 这个模型输出的句子，会出现不太符合人类习惯的说法，可以利用语言模型对输出的内容进行评判，可以使输出更为自然。
+
+
+三、Assignment-01-附加题 问答
+1、这样的程序有什么优点？有什么缺点？你有什么可以改进的方法吗？
+Ans: - 规则的配置相对简单，能够应对一些基本的问答类型应用。
+     - 规则的匹配部分效率较低，采用循环的方式，最坏的情况需要循环N次，才能匹配出结果，效率较低。
+
+2、什么是数据驱动？数据驱动在这个程序里如何体现？
+Ans: - 利用数据来描绘现实生活中的规则，模拟和驱动业务的发展。
+     - 本程序中是利用对话模板来体现数据驱动的过程。
+
+3、数据驱动与 AI 的关系是什么？
+Ans: - 数据驱动是AI的前提和基础，AI是利用机器的计算能力，将隐含的规则找出来。
