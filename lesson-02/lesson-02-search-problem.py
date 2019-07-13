@@ -103,7 +103,7 @@ def get_line_detail(line_name ='', url = ''):
                 string_name = a_tag.string
                 if string_name:
                     result.append(string_name)
-                    print('线路 = {}, 车站 = {} , href = {}'.format(line_name, string_name, a_tag.attrs.get('href', '')))
+                    #print('线路 = {}, 车站 = {} , href = {}'.format(line_name, string_name, a_tag.attrs.get('href', '')))
 
     except HTTPError as e:
         print(e)
@@ -142,7 +142,7 @@ def is_goal(desitination):
 def search(graph, graph_dict, start, is_goal, search_strategy):
     """
     实现地铁上两个站点的导航搜索，目前支持了换乘最少和路径最短两种策略。
-    :param graph: 结构为{key:[list]}的导航地图。本版本地图仅仅构建了一个方向，有时间应该构建两个方向的地图。
+    :param graph: 结构为{key:[list]}的导航地图。
                   key=站点名称，list=该站点能够到达的下一个相邻站点
     :param graph_dict:结构为{key:{set}},key=地铁线路名称，set=该线路下的全部站点名称
     :param start:出发站点
