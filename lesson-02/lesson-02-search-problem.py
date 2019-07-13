@@ -434,12 +434,19 @@ if __name__ == '__main__':
         if station_connection:
             save_stations(station_connection, station_dict)
 
-    # 进行路径计算
+    # 进行路径计算,最短路径
+    # stations = search(station_connection,
+    #                   station_dict,
+    #                   start = '苹果园站',
+    #                   is_goal = is_goal('石门站'),
+    #                   search_strategy = stratety_shortest_path)
+
+    # # 进行路径计算,最少换乘
     stations = search(station_connection,
                       station_dict,
                       start = '苹果园站',
                       is_goal = is_goal('石门站'),
-                      search_strategy = stratety_shortest_path)
+                      search_strategy = stratety_minimum_transfer)
 
     # 将结果进行输出，同时计算换乘信息，此处代码应当再封装一下。
     last_single_station = ''
@@ -465,4 +472,3 @@ if __name__ == '__main__':
             i_transfer += 1
 
         print('{}  站名：{} , 线路：{} , 换乘: {}'.format(i_index, x, line, i_transfer))
-
