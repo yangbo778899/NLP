@@ -1,0 +1,31 @@
+2. Answer following questions:
+1. Why do we need machine learning methods instead of creating a complicated formula?
+Ans: - 规则的不可维护性，规则随着业务的发展，最终会趋向极其复杂；将极大提升维护的代价，导致最终趋于不可维护。
+
+     - 规则的变化速度和形式，业务的迅速变化，导致规则的更新速度和提取都面临极大的挑战。
+
+     - 规则的隐蔽性，随着业务的复杂，规则直接的关系也会更加复杂，导致隐藏的规则容易被发现和提取。
+
+     - 机器学习能够较好的避免上述问题。
+
+2. Wha't's the disadvantages of the 1st Random Choosen methods in our course?
+Ans: - 对于评价参数的loss函数来说，评价的结果会飘忽不定，使得对选择出来的k、b参数的趋势无法进行有效的预估。
+
+3. Is the 2nd method supervised direction better than 1st one? What's the disadvantages of the 2nd supversied directin method?
+Ans: - 第2种方法优于第1种方法，对变化的方向进行选择，能够保证k、b参数能够朝着有效的方向进行选择，选择的趋势性更加明显。
+
+     - 第2种方式需要改进的地方是变化的方向还是随机选择的，这里可以优化成更为直接找到变化方向的形式。
+
+     - 第2种方法变化的step是随机的，这里可以优化成固定step，效果可以更加稳定，更方便选择合适的参数。
+
+4. Why do we use Derivative / Gredient to fit a target function?
+Ans: - 导数反应的是在那一点上，斜率变化的速度，通过导数，我们能够更加清晰的观察梯度变化后，对结果的影响。
+
+5. In the words 'Gredient Descent', what's the Gredient and what's the Descent?
+Ans: -
+
+6. What's the advantages of the 3rd gradient descent method compared to the previous methods?
+Ans:
+
+7. Using the simple words to describe: What's the machine leanring.
+Ans: - 用合适的数学模型，找到能够拟合现实世界的函数。寻找函数的过程可以称为是机器学习。
