@@ -72,7 +72,7 @@ def get_line_detail(line_name ='', url = ''):
     :return:List[站点名称]
     """
     result = []
-    unique_station = set()
+    # unique_station = set()
     try:
         if not url:
             url = 'https://baike.baidu.com/item/%E5%8C%97%E4%BA%AC%E5%9C%B0%E9%93%811%E5%8F%B7%E7%BA%BF'
@@ -90,73 +90,20 @@ def get_line_detail(line_name ='', url = ''):
         tr_tags = table_tag.children
         tr_lists = list(tr_tags)
         tr_len = len(tr_lists)
-        i = -1
-        th_map = collections.OrderedDict()
-
-        station_index = 0
+        i = 1                    # 跳过标题, 表头
         while i < tr_len-1:
             i += 1
             tr = tr_lists[i]
-            if i == 0 : continue          # 跳过标题
             trs_list = list(tr.children)
-            j = -1
-            if i == 1 :                   # 处理表头
-                for td in trs_list:
-                    j += 1
-                    rowspan = int(td.attrs.get('rowspan', 1))
-                    col = int(td.attrs.get('colspan', 1))
-                    if col > 1:
-                        for jj in range(col):
-                            th_map[j + jj] = (rowspan, i, td.string)
-                        j += col - 1
-                    else:
-                        th_map[j] = (rowspan, i, td.string)
-
-                for x in th_map:
-                    if th_map[x][2] == '车站名称':
-                        station_index = x                           # 获取车站名称的存储索引
-                        break
-                for x in th_map:
-                    if th_map[x][2] == '换乘线路':
-                        exchange_index = x                           # 获取换乘信息的存储索引
-            else:
-                tr_list_result = collections.OrderedDict()
-                for td_index in th_map:
-                    j += 1
-                    if j >= len(trs_list): break
-                    rowspan, index, name = th_map[j]
-                    if rowspan == 1 :
-                        td = trs_list[td_index]
-                        rowspan = int(td.attrs.get('rowspan', 1))
-                        col = int(td.attrs.get('colspan', 1))
-                        if col > 1:
-                            for jj in range(col):
-                                if jj == 0:
-                                    tr_list_result[j] = td
-                                    th_map[j] = (rowspan, i, name)
-                                else:
-                                    tr_list_result[j + jj] = None
-                            j += col - 1
-                            continue
-                        else:
-                            tr_list_result[j] = td
-                    else:
-                        tr_list_result[j] = None
-                        rowspan -= 1
-                    th_map[j] = (rowspan, i, name)
-
-                # obj_a = tr_list_result[station_index].next
-                if not tr_list_result:continue
-                obj_a = get_a_label(tr_list_result[station_index])
-                if (obj_a and obj_a.attrs.get('href', '') != ''):
-                    if not (obj_a in unique_station):
-                        result.append(obj_a.string)
-                        print('{} - {} - {}'.format(line_name,
-                                                obj_a.string,
-                                                obj_a.attrs.get('href', '')))
-                    else:
-                        unique_station.add(obj_a)
-
+            if not trs_list:
+                continue
+            # 获取TR下面的第一个TD，然后获取<A></A>的内容
+            a_tag = get_a_label(trs_list[0])
+            if a_tag:
+                string_name = a_tag.string
+                if string_name:
+                    result.append(string_name)
+                    print('线路 = {}, 车站 = {} , href = {}'.format(line_name, string_name, a_tag.attrs.get('href', '')))
 
     except HTTPError as e:
         print(e)
@@ -171,12 +118,12 @@ def get_a_label(tag_obj = None):
     """
     if tag_obj == None: return None
     obj = tag_obj.next
-    if obj:
-        name = obj.name
-        if name == 'a':
-            return obj
-        else:
-            return get_a_label(obj)
+
+    name = obj.name
+    if name == 'a':
+        return obj
+    elif type(obj).__name__ == 'Tag':
+        return get_a_label(obj)
     else:
         return None
 
@@ -342,94 +289,35 @@ def strarety_comprehensive():
     pass
 
 
-    # city_graph = defaultdict(list)
-    # city_graph_src = {'北京':['沈阳','太原'],
-    #               '沈阳':['北京'],
-    #               '太原':['北京','西安','郑州'],
-    #               '兰州':['南宁','西安'],
-    #               '西安':['兰州','长沙'],
-    #               '长沙':['福州','南宁'],
-    #               '南宁':['兰州','长沙']}
-
-    # city_graph_src = { 1:[2, 3],
-    #                    2:[1, 4],
-    #                    3:[1, 5, 8],
-    #                    4:[2, 6],
-    #                    5:[3, 7]}
-    #
-    #
-    # city_graph.update(city_graph_src)
-    #
-    # print(bfs_dfs(city_graph, 1))
-
-    # print(search2('北京', '福州', city_graph))
-
-
-def search2(start, destination, graph):
-    pathes = [[start]]
-    visited = set()
-
-    while pathes:
-        path = pathes.pop(0)
-        froninter = path[-1]
-
-        if froninter in visited: continue
-
-        successor = graph[froninter]
-        for city in successor:
-            new_path = path + [city]
-            pathes.append(new_path)
-
-            if city == destination:
-                return new_path
-        visited.add(froninter)
-
-def bfs_dfs(graph , start):
-    """
-    breath first search  or depth first search
-    :param graph:
-    :param start:
-    :return:
-    """
-    visited = [start]
-    seen = set()
-    while visited:
-
-        froninter = visited.pop()
-
-        if froninter in seen: continue
-
-        for successor in graph[froninter]:
-            if successor in seen: continue
-            print(successor)
-            visited = visited + [successor]      # 深度优先 , 每次都是扩展最新发现的点      depth
-            # visited = [successor] + visited    # 广度优先 , 每次扩展都先考虑已经发现的点 breath
-
-        seen.add(froninter)
-    return seen
-
 if __name__ == '__main__':
 
     host = 'https://baike.baidu.com'
     station_connection = defaultdict(list)
     station_dict = defaultdict(set)
 
+    # get_line_detail('北京地铁昌平线', host+'/item/%E5%8C%97%E4%BA%AC%E5%9C%B0%E9%93%81%E6%98%8C%E5%B9%B3%E7%BA%BF')
+    # exit("end!")       # for debug
+
     # 初始化站点地图和站点字典
     if os.path.exists('stations.txt'):
         station_connection, station_dict = load_stations('stations.txt','stations_dict.txt')
     else:
         metro_lines = init_line(host + '/item/%E5%8C%97%E4%BA%AC%E5%9C%B0%E9%93%81/408485')
-
+        ab_dict = defaultdict(set)
+        ba_dict = defaultdict(set)
         for line, href in metro_lines:
             stations = get_line_detail(line, host+href)
             length = len(stations)
-
             for i in range(length-1):
-                if not (stations[i + 1] in station_dict[line]):
+                station_dict[line].add(stations[i + 1])
+                print(' stations[i] = {} ,stations[i + 1]={}'.format(stations[i], stations[i + 1]))
+                if not (stations[i + 1] in ab_dict[stations[i]]):
                     station_connection[stations[i]].append(stations[i + 1])
-                    station_dict[line].add(stations[i + 1])
-                else:
-                    station_dict[line].add(stations[i + 1])
+                ab_dict[stations[i]] = stations[i + 1]
+
+                if not (stations[i] in ba_dict[stations[i + 1]]):
+                    station_connection[stations[i + 1]].append(stations[i])
+                ba_dict[stations[i]] = stations[i + 1]
 
         if station_connection:
             save_stations(station_connection, station_dict)
